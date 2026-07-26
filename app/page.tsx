@@ -1,65 +1,1278 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useRef, useState, type FormEvent } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+  AnimatePresence,
+} from "framer-motion";
+
+/* ──────────────────────────────────────────────
+   Reusable animated section wrapper
+   ────────────────────────────────────────────── */
+function AnimatedSection({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.8, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   Stagger children animation wrapper
+   ────────────────────────────────────────────── */
+function StaggerContainer({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.12 } },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+const staggerChild = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+};
+
+/* ──────────────────────────────────────────────
+   SVG Icon Components
+   ────────────────────────────────────────────── */
+function IconGlobe() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+      <path d="M2 12h20" />
+    </svg>
+  );
+}
+
+function IconMegaphone() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m3 11 18-5v12L3 13v-2z" />
+      <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+    </svg>
+  );
+}
+
+function IconPhone() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  );
+}
+
+function IconBot() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 8V4H8" />
+      <rect width="16" height="12" x="4" y="8" rx="2" />
+      <path d="M2 14h2" />
+      <path d="M20 14h2" />
+      <path d="M15 13v2" />
+      <path d="M9 13v2" />
+    </svg>
+  );
+}
+
+function IconHeadset() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+    </svg>
+  );
+}
+
+function IconBriefcase() {
+  return (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+    </svg>
+  );
+}
+
+function IconShoppingCart() {
+  return (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+  );
+}
+
+function IconCpu() {
+  return (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="16" height="16" x="4" y="4" rx="2" />
+      <rect width="6" height="6" x="9" y="9" rx="1" />
+      <path d="M15 2v2" />
+      <path d="M15 20v2" />
+      <path d="M2 15h2" />
+      <path d="M2 9h2" />
+      <path d="M20 15h2" />
+      <path d="M20 9h2" />
+      <path d="M9 2v2" />
+      <path d="M9 20v2" />
+    </svg>
+  );
+}
+
+function IconBuilding() {
+  return (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
+      <path d="M9 22v-4h6v4" />
+      <path d="M8 6h.01" />
+      <path d="M16 6h.01" />
+      <path d="M12 6h.01" />
+      <path d="M12 10h.01" />
+      <path d="M12 14h.01" />
+      <path d="M16 10h.01" />
+      <path d="M16 14h.01" />
+      <path d="M8 10h.01" />
+      <path d="M8 14h.01" />
+    </svg>
+  );
+}
+
+function IconTrendingUp() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+      <polyline points="16 7 22 7 22 13" />
+    </svg>
+  );
+}
+
+function IconZap() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  );
+}
+
+function IconMapPin() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
+function IconUsers() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  );
+}
+
+function IconArrowRight() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+function IconChevronDown() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+function IconWhatsApp() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
+}
+
+function IconMenu() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="18" y2="18" />
+    </svg>
+  );
+}
+
+function IconX() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   Data
+   ────────────────────────────────────────────── */
+const NAV_LINKS = [
+  { label: "Services", href: "#services" },
+  { label: "About", href: "#why-ascend" },
+  { label: "Results", href: "#results" },
+  { label: "Contact", href: "#contact" },
+];
+
+const SERVICES = [
+  {
+    icon: <IconGlobe />,
+    title: "Custom Website Development",
+    description:
+      "Bespoke, high-performance websites engineered to convert visitors into customers. From sleek landing pages to complex web applications — built with cutting-edge technology and pixel-perfect design.",
+  },
+  {
+    icon: <IconMegaphone />,
+    title: "Digital Marketing & SEO",
+    description:
+      "Data-driven campaigns that put your brand in front of the right audience. We combine strategic SEO, paid media, and content marketing to deliver measurable, sustainable growth in organic and paid channels.",
+  },
+  {
+    icon: <IconPhone />,
+    title: "AI Calling Agents",
+    description:
+      "Intelligent voice agents that handle inbound and outbound calls with human-like fluency. Qualify leads, book appointments, and follow up — around the clock, without adding headcount.",
+  },
+  {
+    icon: <IconBot />,
+    title: "AI Chatbots",
+    description:
+      "Smart conversational chatbots trained on your business data. Engage website visitors instantly, answer FAQs, capture leads, and route enquiries — delivering instant responses 24/7.",
+  },
+  {
+    icon: <IconHeadset />,
+    title: "24/7 AI Customer Service",
+    description:
+      "End-to-end AI-powered support systems that never sleep. Automate ticket resolution, provide instant answers, and escalate complex issues seamlessly — reducing costs while boosting customer satisfaction.",
+  },
+];
+
+const AUDIENCES = [
+  {
+    icon: <IconBriefcase />,
+    title: "Service-Based Businesses",
+    description:
+      "Consultants, agencies, and professional firms looking to scale their pipeline and automate client interactions.",
+  },
+  {
+    icon: <IconShoppingCart />,
+    title: "E-Commerce Brands",
+    description:
+      "Online retailers seeking higher conversions, smarter marketing spend, and AI-powered customer engagement.",
+  },
+  {
+    icon: <IconCpu />,
+    title: "Tech & SaaS Companies",
+    description:
+      "Software companies ready to implement intelligent automation for sales, support, and lead qualification.",
+  },
+  {
+    icon: <IconBuilding />,
+    title: "Enterprises & SMEs",
+    description:
+      "Established businesses that want to modernise operations with AI integration and digital transformation.",
+  },
+];
+
+const VALUE_PROPS = [
+  {
+    icon: <IconTrendingUp />,
+    title: "ROI-Driven Results",
+    description:
+      "Every strategy is engineered around your bottom line. We measure success in revenue generated, not vanity metrics.",
+  },
+  {
+    icon: <IconZap />,
+    title: "Cutting-Edge AI Integration",
+    description:
+      "We deploy the latest in AI and automation to give your business a competitive edge that compounds over time.",
+  },
+  {
+    icon: <IconMapPin />,
+    title: "UK-Based Expertise",
+    description:
+      "A local team that understands the UK market, regulations, and business culture — with a global technology outlook.",
+  },
+  {
+    icon: <IconUsers />,
+    title: "Seamless Customer Experiences",
+    description:
+      "We design every touchpoint to delight your customers — from first click to lifelong loyalty, powered by intelligent systems.",
+  },
+];
+
+const CASE_STUDIES = [
+  {
+    tag: "E-Commerce",
+    title: "E-Commerce Growth",
+    metric: "300%",
+    metricLabel: "ROI Increase",
+    description:
+      "Transformed an underperforming online store with strategic SEO, conversion optimisation, and AI-powered product recommendations.",
+  },
+  {
+    tag: "AI Automation",
+    title: "AI Agent Implementation",
+    metric: "24/7",
+    metricLabel: "Support Achieved",
+    description:
+      "Deployed an AI calling agent and chatbot system, eliminating after-hours downtime and reducing support costs by 60%.",
+  },
+  {
+    tag: "Lead Generation",
+    title: "B2B Lead Pipeline",
+    metric: "5x",
+    metricLabel: "Qualified Leads",
+    description:
+      "Built a high-converting website with integrated AI chatbot that automated lead qualification and appointment booking.",
+  },
+  {
+    tag: "Digital Marketing",
+    title: "Brand Visibility Campaign",
+    metric: "180%",
+    metricLabel: "Traffic Growth",
+    description:
+      "Executed a multi-channel digital marketing campaign combining SEO, PPC, and content strategy for a professional services firm.",
+  },
+];
+
+/* ──────────────────────────────────────────────
+   NAVIGATION
+   ────────────────────────────────────────────── */
+function Navigation() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  return (
+    <motion.nav
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur-xl"
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+        {/* Logo */}
+        <a
+          href="#"
+          className="font-[family-name:var(--font-heading)] text-2xl font-bold tracking-[0.2em] text-white"
+        >
+          ASCEND
+        </a>
+
+        {/* Desktop Links */}
+        <div className="hidden items-center gap-8 md:flex">
+          {NAV_LINKS.map((link) => (
             <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              key={link.href}
+              href={link.href}
+              className="text-sm text-gray-400 transition-colors duration-300 hover:text-white"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            className="rounded-full border border-white bg-white px-5 py-2 text-sm font-medium text-black transition-all duration-300 hover:bg-transparent hover:text-white"
+          >
+            Book a Free Growth Call
+          </a>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="text-white md:hidden"
+          aria-label="Toggle menu"
+          id="mobile-menu-toggle"
+        >
+          {mobileOpen ? <IconX /> : <IconMenu />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden border-t border-white/5 bg-black/95 backdrop-blur-xl md:hidden"
+          >
+            <div className="flex flex-col gap-4 px-6 py-6">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-lg text-gray-300 transition-colors hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <a
+                href="#contact"
+                onClick={() => setMobileOpen(false)}
+                className="mt-2 rounded-full border border-white bg-white px-5 py-3 text-center text-sm font-medium text-black transition-all duration-300 hover:bg-transparent hover:text-white"
+              >
+                Book a Free Growth Call
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   HERO SECTION
+   ────────────────────────────────────────────── */
+function HeroSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const yText = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+
+  return (
+    <section
+      ref={ref}
+      id="hero"
+      className="noise-bg grid-pattern relative flex min-h-screen items-center justify-center overflow-hidden"
+    >
+      {/* Radial gradient accent */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.02] blur-3xl" />
+
+      <motion.div
+        style={{ y: yText, opacity }}
+        className="relative z-10 mx-auto max-w-5xl px-6 pt-24 text-center"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs tracking-wider text-gray-400"
+        >
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+          UK-BASED B2B GROWTH AGENCY
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="font-[family-name:var(--font-heading)] text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
+        >
+          We Build the Digital
+          <br />
+          <span className="bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">
+            Future of Your Business
+          </span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-gray-400 sm:text-xl"
+        >
+          ASCEND transforms ambitious UK businesses through cutting-edge web
+          development, data-driven digital marketing, and intelligent AI
+          automation — unlocking growth that compounds.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+        >
+          <a
+            href="#contact"
+            id="hero-cta"
+            className="group inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-semibold text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+          >
+            Book a Free Growth Call
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+              <IconArrowRight />
+            </span>
+          </a>
+          <a
+            href="#services"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-8 py-4 text-sm font-medium text-gray-300 transition-all duration-300 hover:border-white/40 hover:text-white"
+          >
+            Explore Services
+          </a>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 1 }}
+          className="mt-20 flex flex-col items-center gap-2"
+        >
+          <span className="text-xs tracking-widest text-gray-600">SCROLL</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          >
+            <IconChevronDown />
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   TARGET AUDIENCE SECTION
+   ────────────────────────────────────────────── */
+function AudienceSection() {
+  return (
+    <section id="audience" className="relative py-28 lg:py-36">
+      <div className="gradient-line mb-20" />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <AnimatedSection className="mb-16 text-center">
+          <span className="mb-4 inline-block text-xs font-medium tracking-[0.3em] text-gray-500">
+            WHO WE PARTNER WITH
+          </span>
+          <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            Built for Businesses
+            <br />
+            Ready to Scale
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
+            We work exclusively with growth-minded organisations that are ready
+            to leverage digital and AI to dominate their market.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        </AnimatedSection>
+
+        <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {AUDIENCES.map((item) => (
+            <motion.div
+              key={item.title}
+              variants={staggerChild}
+              className="group relative rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition-all duration-500 hover:border-white/15 hover:bg-white/[0.05]"
+            >
+              <div className="mb-5 inline-flex rounded-xl border border-white/10 bg-white/5 p-3 text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black">
+                {item.icon}
+              </div>
+              <h3 className="mb-3 font-[family-name:var(--font-heading)] text-lg font-semibold text-white">
+                {item.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-gray-500">
+                {item.description}
+              </p>
+            </motion.div>
+          ))}
+        </StaggerContainer>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   SERVICES SECTION (Accordion)
+   ────────────────────────────────────────────── */
+function ServicesSection() {
+  const [openIndex, setOpenIndex] = useState<number>(0);
+
+  return (
+    <section id="services" className="relative py-28 lg:py-36">
+      <div className="gradient-line mb-20" />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <AnimatedSection className="mb-16">
+          <span className="mb-4 inline-block text-xs font-medium tracking-[0.3em] text-gray-500">
+            OUR SERVICES
+          </span>
+          <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            End-to-End Solutions
+            <br />
+            for Digital Dominance
+          </h2>
+        </AnimatedSection>
+
+        <StaggerContainer className="grid gap-0 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+          {/* Accordion */}
+          <motion.div variants={staggerChild} className="space-y-0">
+            {SERVICES.map((service, idx) => {
+              const isOpen = openIndex === idx;
+              return (
+                <div
+                  key={service.title}
+                  className="border-b border-white/5"
+                >
+                  <button
+                    onClick={() => setOpenIndex(idx)}
+                    className="flex w-full items-center justify-between py-6 text-left transition-colors duration-300"
+                    id={`service-accordion-${idx}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`transition-colors duration-300 ${
+                          isOpen ? "text-white" : "text-gray-600"
+                        }`}
+                      >
+                        {service.icon}
+                      </span>
+                      <span
+                        className={`font-[family-name:var(--font-heading)] text-lg font-medium transition-colors duration-300 ${
+                          isOpen ? "text-white" : "text-gray-500"
+                        }`}
+                      >
+                        {service.title}
+                      </span>
+                    </div>
+                    <motion.span
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className={`transition-colors duration-300 ${
+                        isOpen ? "text-white" : "text-gray-600"
+                      }`}
+                    >
+                      <IconChevronDown />
+                    </motion.span>
+                  </button>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pb-6 pl-12 pr-4 text-sm leading-relaxed text-gray-400">
+                          {service.description}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </motion.div>
+
+          {/* Feature highlight card */}
+          <motion.div
+            variants={staggerChild}
+            className="mt-10 flex items-center lg:mt-0"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={openIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.4 }}
+                className="glow w-full rounded-3xl border border-white/5 bg-gradient-to-br from-white/[0.04] to-transparent p-10 lg:p-14"
+              >
+                <div className="mb-6 inline-flex rounded-2xl border border-white/10 bg-white/5 p-4 text-white">
+                  {SERVICES[openIndex].icon}
+                </div>
+                <h3 className="mb-4 font-[family-name:var(--font-heading)] text-2xl font-bold text-white lg:text-3xl">
+                  {SERVICES[openIndex].title}
+                </h3>
+                <p className="mb-8 leading-relaxed text-gray-400">
+                  {SERVICES[openIndex].description}
+                </p>
+                <a
+                  href="#contact"
+                  className="group inline-flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-gray-300"
+                >
+                  Get started
+                  <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+                    <IconArrowRight />
+                  </span>
+                </a>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        </StaggerContainer>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   VALUE PROPOSITION SECTION
+   ────────────────────────────────────────────── */
+function ValuePropSection() {
+  return (
+    <section id="why-ascend" className="relative py-28 lg:py-36">
+      <div className="gradient-line mb-20" />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <AnimatedSection className="mb-16 text-center">
+          <span className="mb-4 inline-block text-xs font-medium tracking-[0.3em] text-gray-500">
+            WHY ASCEND
+          </span>
+          <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            The Unfair Advantage
+            <br />
+            Your Competitors Don&apos;t Have
+          </h2>
+        </AnimatedSection>
+
+        <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {VALUE_PROPS.map((item, idx) => (
+            <motion.div
+              key={item.title}
+              variants={staggerChild}
+              className="group relative rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition-all duration-500 hover:border-white/15 hover:bg-white/[0.05]"
+            >
+              <div className="mb-2 font-[family-name:var(--font-heading)] text-5xl font-bold text-white/[0.06]">
+                0{idx + 1}
+              </div>
+              <div className="mb-4 text-white">{item.icon}</div>
+              <h3 className="mb-3 font-[family-name:var(--font-heading)] text-lg font-semibold text-white">
+                {item.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-gray-500">
+                {item.description}
+              </p>
+            </motion.div>
+          ))}
+        </StaggerContainer>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   RESULTS / CASE STUDIES SECTION
+   ────────────────────────────────────────────── */
+function ResultsSection() {
+  return (
+    <section id="results" className="relative py-28 lg:py-36">
+      <div className="gradient-line mb-20" />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <AnimatedSection className="mb-16 text-center">
+          <span className="mb-4 inline-block text-xs font-medium tracking-[0.3em] text-gray-500">
+            PORTFOLIO & RESULTS
+          </span>
+          <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            Proven Impact,
+            <br />
+            Measurable Growth
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-400">
+            Every engagement is designed to deliver tangible results. Here&apos;s
+            a snapshot of the outcomes we drive.
+          </p>
+        </AnimatedSection>
+
+        <StaggerContainer className="grid gap-6 sm:grid-cols-2">
+          {CASE_STUDIES.map((study) => (
+            <motion.div
+              key={study.title}
+              variants={staggerChild}
+              className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition-all duration-500 hover:border-white/15 hover:bg-white/[0.05] lg:p-10"
+            >
+              {/* Background metric */}
+              <div className="pointer-events-none absolute -right-4 -top-4 font-[family-name:var(--font-heading)] text-[8rem] font-bold leading-none text-white/[0.03] transition-all duration-500 group-hover:text-white/[0.06] lg:text-[10rem]">
+                {study.metric}
+              </div>
+
+              <div className="relative z-10">
+                <span className="mb-4 inline-block rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs tracking-wider text-gray-400">
+                  {study.tag}
+                </span>
+                <h3 className="mb-2 font-[family-name:var(--font-heading)] text-xl font-semibold text-white lg:text-2xl">
+                  {study.title}
+                </h3>
+                <div className="mb-4 flex items-baseline gap-2">
+                  <span className="font-[family-name:var(--font-heading)] text-4xl font-bold text-white">
+                    {study.metric}
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    {study.metricLabel}
+                  </span>
+                </div>
+                <p className="text-sm leading-relaxed text-gray-500">
+                  {study.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </StaggerContainer>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   CONTACT & FOOTER SECTION
+   ────────────────────────────────────────────── */
+function ContactSection() {
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    business: "",
+    message: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    // In production, wire this to your backend/API
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 4000);
+    setFormState({ name: "", email: "", business: "", message: "" });
+  };
+
+  return (
+    <section id="contact" className="relative py-28 lg:py-36">
+      <div className="gradient-line mb-20" />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="grid gap-16 lg:grid-cols-2">
+          {/* Left: CTA */}
+          <AnimatedSection>
+            <span className="mb-4 inline-block text-xs font-medium tracking-[0.3em] text-gray-500">
+              GET IN TOUCH
+            </span>
+            <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
+              Ready to Ascend?
+            </h2>
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-gray-400">
+              Book a free, no-obligation growth call with our team. We&apos;ll
+              analyse your current digital presence, identify the highest-impact
+              opportunities, and map out a clear path to growth.
+            </p>
+
+            <div className="mt-10 space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="rounded-lg border border-white/10 bg-white/5 p-2.5 text-white">
+                  <IconZap />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">
+                    Free Growth Audit
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    We&apos;ll review your digital presence and provide
+                    actionable insights — no strings attached.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="rounded-lg border border-white/10 bg-white/5 p-2.5 text-white">
+                  <IconTrendingUp />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white">
+                    Custom Strategy
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    Receive a tailored growth roadmap designed specifically for
+                    your business and industry.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* Right: Form */}
+          <AnimatedSection delay={0.2}>
+            <form
+              onSubmit={handleSubmit}
+              className="rounded-2xl border border-white/5 bg-white/[0.02] p-8 lg:p-10"
+            >
+              <div className="space-y-5">
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="mb-2 block text-sm font-medium text-gray-300"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    required
+                    value={formState.name}
+                    onChange={(e) =>
+                      setFormState((s) => ({ ...s, name: e.target.value }))
+                    }
+                    placeholder="John Smith"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition-colors duration-300 focus:border-white/30 focus:bg-white/[0.08]"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="contact-email"
+                    className="mb-2 block text-sm font-medium text-gray-300"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    required
+                    value={formState.email}
+                    onChange={(e) =>
+                      setFormState((s) => ({ ...s, email: e.target.value }))
+                    }
+                    placeholder="john@company.co.uk"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition-colors duration-300 focus:border-white/30 focus:bg-white/[0.08]"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="contact-business"
+                    className="mb-2 block text-sm font-medium text-gray-300"
+                  >
+                    Business Name
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-business"
+                    required
+                    value={formState.business}
+                    onChange={(e) =>
+                      setFormState((s) => ({ ...s, business: e.target.value }))
+                    }
+                    placeholder="Acme Ltd"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition-colors duration-300 focus:border-white/30 focus:bg-white/[0.08]"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="mb-2 block text-sm font-medium text-gray-300"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    required
+                    rows={4}
+                    value={formState.message}
+                    onChange={(e) =>
+                      setFormState((s) => ({ ...s, message: e.target.value }))
+                    }
+                    placeholder="Tell us about your project and goals..."
+                    className="w-full resize-none rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition-colors duration-300 focus:border-white/30 focus:bg-white/[0.08]"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                id="contact-submit"
+                className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-4 text-sm font-semibold text-black transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+              >
+                {submitted ? (
+                  "Message Sent ✓"
+                ) : (
+                  <>
+                    Book a Free Growth Call
+                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+                      <IconArrowRight />
+                    </span>
+                  </>
+                )}
+              </button>
+            </form>
+          </AnimatedSection>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   FOOTER
+   ────────────────────────────────────────────── */
+function Footer() {
+  return (
+    <footer className="border-t border-white/5 py-12">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+          <div className="flex flex-col items-center gap-2 md:items-start">
+            <span className="font-[family-name:var(--font-heading)] text-xl font-bold tracking-[0.2em] text-white">
+              ASCEND
+            </span>
+            <span className="text-xs text-gray-600">
+              Elevating UK businesses through digital innovation & AI.
+            </span>
+          </div>
+          <div className="flex items-center gap-6">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-xs text-gray-500 transition-colors hover:text-white"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+          <div className="flex flex-col items-center gap-1 md:items-end">
+            <span className="text-xs text-gray-600">
+              © {new Date().getFullYear()} ASCEND. All rights reserved.
+            </span>
+            <span className="text-xs text-gray-700">
+              UK-Based Digital Growth Agency
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   FLOATING WHATSAPP BUTTON
+   ────────────────────────────────────────────── */
+function WhatsAppFloat() {
+  return (
+    <a
+      href="https://wa.me/447000000000"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on WhatsApp"
+      id="whatsapp-float"
+      className="fixed bottom-6 right-6 z-50 flex items-center justify-center"
+    >
+      <span className="absolute h-14 w-14 rounded-full bg-green-500/30 animate-pulse-ring" />
+      <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-green-500/20 transition-transform duration-300 hover:scale-110">
+        <IconWhatsApp />
+      </span>
+    </a>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   MAIN EXPORT
+   ────────────────────────────────────────────── */
+export default function AscendPage() {
+  return (
+    <>
+      <Navigation />
+      <main>
+        <HeroSection />
+        <AudienceSection />
+        <ServicesSection />
+        <ValuePropSection />
+        <ResultsSection />
+        <ContactSection />
       </main>
-    </div>
+      <Footer />
+      <WhatsAppFloat />
+    </>
   );
 }
