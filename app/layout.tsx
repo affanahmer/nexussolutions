@@ -38,8 +38,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-black text-white font-[family-name:var(--font-inter)]">
+      <body 
+        className="min-h-full flex flex-col bg-[var(--theme-bg)] text-[var(--theme-fg)] font-[family-name:var(--font-inter)]"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

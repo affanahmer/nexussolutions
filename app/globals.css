@@ -18,15 +18,119 @@
   --font-heading: var(--font-space-grotesk);
 }
 
-/* Smooth scrolling */
+/* ═══════════════════════════════════════
+   THEME CUSTOM PROPERTIES
+   ═══════════════════════════════════════ */
+
+/* Dark theme (default) */
+:root {
+  --theme-bg: #000000;
+  --theme-fg: #ffffff;
+  --theme-muted: #a3a3a3;
+  --theme-muted-strong: #d4d4d4;
+  --theme-subtle: #737373;
+  --theme-faint: #525252;
+  --theme-dimmed: #404040;
+  --theme-ghost: #262626;
+
+  --theme-nav-bg: rgba(0, 0, 0, 0.7);
+  --theme-border: rgba(255, 255, 255, 0.05);
+  --theme-border-strong: rgba(255, 255, 255, 0.1);
+  --theme-border-hover: rgba(255, 255, 255, 0.15);
+
+  --theme-card: rgba(255, 255, 255, 0.05);
+  --theme-card-subtle: rgba(255, 255, 255, 0.02);
+  --theme-card-hover: rgba(255, 255, 255, 0.08);
+  --theme-card-gradient-from: rgba(255, 255, 255, 0.04);
+
+  --theme-accent-glow: rgba(255, 255, 255, 0.02);
+  --theme-watermark: rgba(255, 255, 255, 0.03);
+  --theme-watermark-hover: rgba(255, 255, 255, 0.06);
+
+  --theme-selection-bg: rgba(255, 255, 255, 0.2);
+  --theme-selection-fg: #ffffff;
+
+  --theme-scrollbar-track: #000;
+  --theme-scrollbar-thumb: #333;
+  --theme-scrollbar-thumb-hover: #555;
+
+  --theme-gradient-line: rgba(255, 255, 255, 0.3);
+  --theme-grid-line: rgba(255, 255, 255, 0.03);
+  --theme-glow-shadow: rgba(255, 255, 255, 0.05);
+  --theme-cta-glow: rgba(255, 255, 255, 0.15);
+
+  --theme-hero-grad-from: #ffffff;
+  --theme-hero-grad-via: #d4d4d4;
+  --theme-hero-grad-to: #737373;
+
+  --theme-input-bg: rgba(255, 255, 255, 0.05);
+  --theme-input-focus-bg: rgba(255, 255, 255, 0.08);
+  --theme-input-border: rgba(255, 255, 255, 0.1);
+  --theme-input-focus-border: rgba(255, 255, 255, 0.3);
+  --theme-placeholder: #525252;
+}
+
+/* Light theme */
+html.light {
+  --theme-bg: #ffffff;
+  --theme-fg: #0a0a0a;
+  --theme-muted: #525252;
+  --theme-muted-strong: #404040;
+  --theme-subtle: #737373;
+  --theme-faint: #a3a3a3;
+  --theme-dimmed: #d4d4d4;
+  --theme-ghost: #f5f5f5;
+
+  --theme-nav-bg: rgba(255, 255, 255, 0.8);
+  --theme-border: rgba(0, 0, 0, 0.06);
+  --theme-border-strong: rgba(0, 0, 0, 0.1);
+  --theme-border-hover: rgba(0, 0, 0, 0.15);
+
+  --theme-card: rgba(0, 0, 0, 0.03);
+  --theme-card-subtle: rgba(0, 0, 0, 0.015);
+  --theme-card-hover: rgba(0, 0, 0, 0.06);
+  --theme-card-gradient-from: rgba(0, 0, 0, 0.03);
+
+  --theme-accent-glow: rgba(0, 0, 0, 0.02);
+  --theme-watermark: rgba(0, 0, 0, 0.04);
+  --theme-watermark-hover: rgba(0, 0, 0, 0.07);
+
+  --theme-selection-bg: rgba(0, 0, 0, 0.15);
+  --theme-selection-fg: #000000;
+
+  --theme-scrollbar-track: #f5f5f5;
+  --theme-scrollbar-thumb: #d4d4d4;
+  --theme-scrollbar-thumb-hover: #a3a3a3;
+
+  --theme-gradient-line: rgba(0, 0, 0, 0.12);
+  --theme-grid-line: rgba(0, 0, 0, 0.04);
+  --theme-glow-shadow: rgba(0, 0, 0, 0.06);
+  --theme-cta-glow: rgba(0, 0, 0, 0.08);
+
+  --theme-hero-grad-from: #0a0a0a;
+  --theme-hero-grad-via: #404040;
+  --theme-hero-grad-to: #737373;
+
+  --theme-input-bg: rgba(0, 0, 0, 0.03);
+  --theme-input-focus-bg: rgba(0, 0, 0, 0.05);
+  --theme-input-border: rgba(0, 0, 0, 0.1);
+  --theme-input-focus-border: rgba(0, 0, 0, 0.25);
+  --theme-placeholder: #a3a3a3;
+}
+
+/* ═══════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════ */
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--theme-bg);
+  color: var(--theme-fg);
   font-family: var(--font-sans), system-ui, sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 /* Custom scrollbar */
@@ -35,23 +139,27 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: var(--theme-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: var(--theme-scrollbar-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--theme-scrollbar-thumb-hover);
 }
 
 /* Selection */
 ::selection {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--theme-selection-bg);
+  color: var(--theme-selection-fg);
 }
+
+/* ═══════════════════════════════════════
+   DECORATIVE PATTERNS
+   ═══════════════════════════════════════ */
 
 /* Noise texture overlay */
 .noise-bg::before {
@@ -66,8 +174,8 @@ body {
 /* Grid pattern for hero */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(var(--theme-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--theme-grid-line) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
@@ -77,14 +185,14 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.3),
+    var(--theme-gradient-line),
     transparent
   );
 }
 
 /* Glow effect */
 .glow {
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 40px var(--theme-glow-shadow);
 }
 
 /* Pulse ring animation for WhatsApp */
@@ -101,4 +209,241 @@ body {
 
 .animate-pulse-ring {
   animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* ═══════════════════════════════════════
+   LIGHT MODE — Component Overrides
+   Applied via CSS to avoid rewriting
+   every Tailwind class in JSX
+   ═══════════════════════════════════════ */
+
+/* --- Global text color inversions --- */
+html.light .text-white {
+  color: var(--theme-fg) !important;
+}
+
+html.light .text-black {
+  color: var(--theme-bg) !important;
+}
+
+/* --- Background inversions --- */
+html.light .bg-black {
+  background-color: var(--theme-bg) !important;
+}
+
+html.light .bg-white {
+  background-color: var(--theme-fg) !important;
+}
+
+/* --- Hero section --- */
+html.light .bg-gradient-to-r.from-white.via-gray-300.to-gray-500 {
+  --tw-gradient-from: var(--theme-hero-grad-from);
+  --tw-gradient-via: var(--theme-hero-grad-via);
+  --tw-gradient-to: var(--theme-hero-grad-to);
+}
+
+/* Hero gradient text */
+html.light #hero span.bg-clip-text {
+  background-image: linear-gradient(
+    to right,
+    var(--theme-hero-grad-from),
+    var(--theme-hero-grad-via),
+    var(--theme-hero-grad-to)
+  ) !important;
+}
+
+/* Hero badge */
+html.light .bg-white\/5 {
+  background-color: var(--theme-card) !important;
+}
+
+html.light .bg-white\/\[0\.02\] {
+  background-color: var(--theme-card-subtle) !important;
+}
+
+html.light .bg-white\/\[0\.04\] {
+  background-color: var(--theme-card-gradient-from) !important;
+}
+
+html.light .bg-white\/\[0\.05\] {
+  background-color: var(--theme-card) !important;
+}
+
+html.light .bg-white\/\[0\.08\] {
+  background-color: var(--theme-card-hover) !important;
+}
+
+html.light .bg-white\/\[0\.02\],
+html.light .hover\:bg-white\/\[0\.05\]:hover {
+  background-color: var(--theme-card-hover) !important;
+}
+
+/* Radial glow in hero */
+html.light .bg-white\/\[0\.02\].blur-3xl {
+  background-color: var(--theme-accent-glow) !important;
+}
+
+/* --- Borders --- */
+html.light .border-white\/5 {
+  border-color: var(--theme-border) !important;
+}
+
+html.light .border-white\/10 {
+  border-color: var(--theme-border-strong) !important;
+}
+
+html.light .border-white\/15,
+html.light .hover\:border-white\/15:hover {
+  border-color: var(--theme-border-hover) !important;
+}
+
+html.light .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light .hover\:border-white\/40:hover {
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+html.light .border-white {
+  border-color: var(--theme-fg) !important;
+}
+
+/* --- Gray text scale --- */
+html.light .text-gray-300 {
+  color: #525252 !important;
+}
+
+html.light .text-gray-400 {
+  color: #525252 !important;
+}
+
+html.light .text-gray-500 {
+  color: #737373 !important;
+}
+
+html.light .text-gray-600 {
+  color: #a3a3a3 !important;
+}
+
+html.light .text-gray-700 {
+  color: #d4d4d4 !important;
+}
+
+/* --- Card hover states --- */
+html.light .group:hover .group-hover\:bg-white {
+  background-color: var(--theme-fg) !important;
+}
+
+html.light .group:hover .group-hover\:text-black {
+  color: var(--theme-bg) !important;
+}
+
+/* --- Service accordion active/inactive --- */
+html.light .text-gray-600 svg {
+  color: inherit;
+}
+
+/* --- Form inputs --- */
+html.light input,
+html.light textarea {
+  background-color: var(--theme-input-bg) !important;
+  border-color: var(--theme-input-border) !important;
+  color: var(--theme-fg) !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: var(--theme-placeholder) !important;
+}
+
+html.light input:focus,
+html.light textarea:focus {
+  background-color: var(--theme-input-focus-bg) !important;
+  border-color: var(--theme-input-focus-border) !important;
+}
+
+/* --- CTA buttons --- */
+html.light .bg-white.text-black,
+html.light a.bg-white {
+  background-color: var(--theme-fg) !important;
+  color: var(--theme-bg) !important;
+}
+
+html.light a.bg-white:hover,
+html.light button.bg-white:hover {
+  background-color: transparent !important;
+  color: var(--theme-fg) !important;
+}
+
+html.light .hover\:bg-transparent:hover {
+  background-color: transparent !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: var(--theme-fg) !important;
+}
+
+/* CTA glow */
+html.light .hover\:shadow-\[0_0_40px_rgba\(255\,255\,255\,0\.15\)\]:hover {
+  box-shadow: 0 0 40px var(--theme-cta-glow) !important;
+}
+
+html.light .hover\:shadow-\[0_0_30px_rgba\(255\,255\,255\,0\.1\)\]:hover {
+  box-shadow: 0 0 30px var(--theme-cta-glow) !important;
+}
+
+/* --- Watermark text in results cards --- */
+html.light .text-white\/\[0\.03\] {
+  color: var(--theme-watermark) !important;
+}
+
+html.light .group:hover .group-hover\:text-white\/\[0\.06\] {
+  color: var(--theme-watermark-hover) !important;
+}
+
+/* --- Animated pulse dot --- */
+html.light .bg-white.animate-pulse {
+  background-color: var(--theme-fg) !important;
+}
+
+/* --- Service detail card gradient --- */
+html.light .bg-gradient-to-br.from-white\/\[0\.04\] {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--theme-card-gradient-from),
+    transparent
+  ) !important;
+}
+
+/* --- Value prop large numbers --- */
+html.light .text-white\/\[0\.06\] {
+  color: var(--theme-watermark-hover) !important;
+}
+
+/* --- Footer --- */
+html.light footer {
+  border-color: var(--theme-border) !important;
+}
+
+/* --- Scroll indicator --- */
+html.light .text-gray-600 svg {
+  stroke: #a3a3a3;
+}
+
+/* --- Smooth transition for all theme-dependent elements --- */
+html.light *,
+html.light *::before,
+html.light *::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* Opt out animations from the blanket transition to avoid perf issues */
+html.light [class*="animate-"],
+html.light .motion-reduce *,
+html.light video,
+html.light img {
+  transition-property: none !important;
 }

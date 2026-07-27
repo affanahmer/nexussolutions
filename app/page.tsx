@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, type FormEvent } from "react";
+import React, { useRef, useState, useEffect, type FormEvent } from "react";
 import {
   motion,
   useScroll,
@@ -415,6 +415,48 @@ function IconX() {
   );
 }
 
+function IconSun() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="m4.93 4.93 1.41 1.41" />
+      <path d="m17.66 17.66 1.41 1.41" />
+      <path d="M2 12h2" />
+      <path d="M20 12h2" />
+      <path d="m6.34 17.66-1.41 1.41" />
+      <path d="m19.07 4.93-1.41 1.41" />
+    </svg>
+  );
+}
+
+function IconMoon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+    </svg>
+  );
+}
+
 /* ──────────────────────────────────────────────
    Data
    ────────────────────────────────────────────── */
@@ -550,7 +592,13 @@ const CASE_STUDIES = [
 /* ──────────────────────────────────────────────
    NAVIGATION
    ────────────────────────────────────────────── */
-function Navigation() {
+function Navigation({
+  theme,
+  onToggleTheme,
+}: {
+  theme: "dark" | "light";
+  onToggleTheme: () => void;
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -558,13 +606,13 @@ function Navigation() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur-xl"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--theme-border)] bg-[var(--theme-nav-bg)] backdrop-blur-xl"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         {/* Logo */}
         <a
           href="#"
-          className="font-[family-name:var(--font-heading)] text-2xl font-bold tracking-[0.2em] text-white"
+          className="font-[family-name:var(--font-heading)] text-2xl font-bold tracking-[0.2em] text-[var(--theme-fg)]"
         >
           ASCEND
         </a>
@@ -575,28 +623,70 @@ function Navigation() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-gray-400 transition-colors duration-300 hover:text-white"
+              className="text-sm text-[var(--theme-muted)] transition-colors duration-300 hover:text-[var(--theme-fg)]"
             >
               {link.label}
             </a>
           ))}
+
+          {/* Theme Toggle */}
+          <button
+            onClick={onToggleTheme}
+            id="theme-toggle"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            className="relative flex h-9 w-9 items-center justify-center rounded-full border border-[var(--theme-border-strong)] bg-[var(--theme-card)] text-[var(--theme-fg)] transition-all duration-300 hover:bg-[var(--theme-card-hover)]"
+          >
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={theme}
+                initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.25 }}
+                className="flex items-center justify-center"
+              >
+                {theme === "dark" ? <IconSun /> : <IconMoon />}
+              </motion.span>
+            </AnimatePresence>
+          </button>
+
           <a
             href="#contact"
-            className="rounded-full border border-white bg-white px-5 py-2 text-sm font-medium text-black transition-all duration-300 hover:bg-transparent hover:text-white"
+            className="rounded-full border border-[var(--theme-fg)] bg-[var(--theme-fg)] px-5 py-2 text-sm font-medium text-[var(--theme-bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--theme-fg)]"
           >
             Book a Free Growth Call
           </a>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-white md:hidden"
-          aria-label="Toggle menu"
-          id="mobile-menu-toggle"
-        >
-          {mobileOpen ? <IconX /> : <IconMenu />}
-        </button>
+        {/* Mobile: Theme toggle + Menu Button */}
+        <div className="flex items-center gap-3 md:hidden">
+          <button
+            onClick={onToggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--theme-border-strong)] bg-[var(--theme-card)] text-[var(--theme-fg)] transition-all duration-300"
+          >
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={theme}
+                initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.25 }}
+                className="flex items-center justify-center"
+              >
+                {theme === "dark" ? <IconSun /> : <IconMoon />}
+              </motion.span>
+            </AnimatePresence>
+          </button>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="text-[var(--theme-fg)]"
+            aria-label="Toggle menu"
+            id="mobile-menu-toggle"
+          >
+            {mobileOpen ? <IconX /> : <IconMenu />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -607,7 +697,7 @@ function Navigation() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-white/5 bg-black/95 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t border-[var(--theme-border)] bg-[var(--theme-nav-bg)] backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
               {NAV_LINKS.map((link) => (
@@ -615,7 +705,7 @@ function Navigation() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-lg text-gray-300 transition-colors hover:text-white"
+                  className="text-lg text-[var(--theme-muted)] transition-colors hover:text-[var(--theme-fg)]"
                 >
                   {link.label}
                 </a>
@@ -623,7 +713,7 @@ function Navigation() {
               <a
                 href="#contact"
                 onClick={() => setMobileOpen(false)}
-                className="mt-2 rounded-full border border-white bg-white px-5 py-3 text-center text-sm font-medium text-black transition-all duration-300 hover:bg-transparent hover:text-white"
+                className="mt-2 rounded-full border border-[var(--theme-fg)] bg-[var(--theme-fg)] px-5 py-3 text-center text-sm font-medium text-[var(--theme-bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--theme-fg)]"
               >
                 Book a Free Growth Call
               </a>
@@ -823,16 +913,14 @@ function ServicesSection() {
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`transition-colors duration-300 ${
-                          isOpen ? "text-white" : "text-gray-600"
-                        }`}
+                        className={`transition-colors duration-300 ${isOpen ? "text-white" : "text-gray-600"
+                          }`}
                       >
                         {service.icon}
                       </span>
                       <span
-                        className={`font-[family-name:var(--font-heading)] text-lg font-medium transition-colors duration-300 ${
-                          isOpen ? "text-white" : "text-gray-500"
-                        }`}
+                        className={`font-[family-name:var(--font-heading)] text-lg font-medium transition-colors duration-300 ${isOpen ? "text-white" : "text-gray-500"
+                          }`}
                       >
                         {service.title}
                       </span>
@@ -840,9 +928,8 @@ function ServicesSection() {
                     <motion.span
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
-                      className={`transition-colors duration-300 ${
-                        isOpen ? "text-white" : "text-gray-600"
-                      }`}
+                      className={`transition-colors duration-300 ${isOpen ? "text-white" : "text-gray-600"
+                        }`}
                     >
                       <IconChevronDown />
                     </motion.span>
@@ -1025,13 +1112,51 @@ function ContactSection() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // In production, wire this to your backend/API
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
-    setFormState({ name: "", email: "", business: "", message: "" });
+    setLoading(true);
+    setError("");
+
+    try {
+      // We are using Web3Forms (password-free form forwarding).
+      // 1. Go to https://web3forms.com/
+      // 2. Enter your email (ascenduk.agency@gmail.com) and click "Create Access Key".
+      // 3. Check your email for the key, and paste it here:
+      const accessKey = "7b325b3d-e17a-4d6b-a65f-8c54b95e118e";
+
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          subject: "New Enquiry from ASCEND Website",
+          from_name: "ASCEND Website",
+          ...formState,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Something went wrong.");
+      }
+
+      setSubmitted(true);
+      setFormState({ name: "", email: "", business: "", message: "" });
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to send. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -1173,9 +1298,18 @@ function ContactSection() {
               <button
                 type="submit"
                 id="contact-submit"
-                className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-4 text-sm font-semibold text-black transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+                disabled={loading}
+                className="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-4 text-sm font-semibold text-black transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] disabled:opacity-60 disabled:hover:scale-100"
               >
-                {submitted ? (
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Sending...
+                  </span>
+                ) : submitted ? (
                   "Message Sent ✓"
                 ) : (
                   <>
@@ -1186,6 +1320,12 @@ function ContactSection() {
                   </>
                 )}
               </button>
+
+              {error && (
+                <p className="mt-3 text-center text-sm text-red-400">
+                  {error}
+                </p>
+              )}
             </form>
           </AnimatedSection>
         </div>
@@ -1260,9 +1400,33 @@ function WhatsAppFloat() {
    MAIN EXPORT
    ────────────────────────────────────────────── */
 export default function AscendPage() {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("ascend-theme") as
+      | "dark"
+      | "light"
+      | null;
+    if (saved === "light") {
+      setTheme("light");
+      document.documentElement.classList.add("light");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    if (next === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+    localStorage.setItem("ascend-theme", next);
+  };
+
   return (
     <>
-      <Navigation />
+      <Navigation theme={theme} onToggleTheme={toggleTheme} />
       <main>
         <HeroSection />
         <AudienceSection />
