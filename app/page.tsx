@@ -462,7 +462,7 @@ function IconMoon() {
    ────────────────────────────────────────────── */
 const NAV_LINKS = [
   { label: "Services", href: "#services" },
-  { label: "About", href: "#why-ascend" },
+  { label: "About", href: "#why-nexus" },
   { label: "Results", href: "#results" },
   { label: "Contact", href: "#contact" },
 ];
@@ -556,36 +556,52 @@ const VALUE_PROPS = [
 
 const CASE_STUDIES = [
   {
+    tag: "Web Experience",
+    title: "Immersive 3D Website",
+    metric: "+240%",
+    metricLabel: "User Engagement",
+    description:
+      "Developed a stunning WebGL-powered 3D web experience that immersed visitors in the brand's universe, significantly boosting dwell time and lead generation.",
+  },
+  {
+    tag: "Voice AI",
+    title: "AI Outbound Calling Agent",
+    metric: "15k+",
+    metricLabel: "Calls Handled / Month",
+    description:
+      "Built a custom conversational voice AI that dials thousands of leads, handles objections seamlessly, and books qualified appointments on autopilot.",
+  },
+  {
+    tag: "Customer Service",
+    title: "Autonomous AI Helpdesk",
+    metric: "85%",
+    metricLabel: "Ticket Deflection",
+    description:
+      "Integrated a custom-trained language model into the client's support portal, enabling human-like resolution of complex queries in seconds.",
+  },
+  {
     tag: "E-Commerce",
-    title: "E-Commerce Growth",
+    title: "E-Commerce Growth Engine",
     metric: "300%",
     metricLabel: "ROI Increase",
     description:
-      "Transformed an underperforming online store with strategic SEO, conversion optimisation, and AI-powered product recommendations.",
-  },
-  {
-    tag: "AI Automation",
-    title: "AI Agent Implementation",
-    metric: "24/7",
-    metricLabel: "Support Achieved",
-    description:
-      "Deployed an AI calling agent and chatbot system, eliminating after-hours downtime and reducing support costs by 60%.",
+      "Transformed an underperforming online store with strategic SEO, targeted paid media, and AI-powered product recommendations.",
   },
   {
     tag: "Lead Generation",
-    title: "B2B Lead Pipeline",
+    title: "B2B Acquisition Pipeline",
     metric: "5x",
     metricLabel: "Qualified Leads",
     description:
-      "Built a high-converting website with integrated AI chatbot that automated lead qualification and appointment booking.",
+      "Engineered a high-converting landing page ecosystem paired with an AI qualification chatbot that captures and scores leads 24/7.",
   },
   {
     tag: "Digital Marketing",
-    title: "Brand Visibility Campaign",
-    metric: "180%",
-    metricLabel: "Traffic Growth",
+    title: "Omnichannel Scale",
+    metric: "4.2x",
+    metricLabel: "ROAS Achieved",
     description:
-      "Executed a multi-channel digital marketing campaign combining SEO, PPC, and content strategy for a professional services firm.",
+      "Executed a multi-platform performance marketing campaign utilizing predictive AI targeting to dramatically lower customer acquisition costs.",
   },
 ];
 
@@ -614,7 +630,7 @@ function Navigation({
           href="#"
           className="font-[family-name:var(--font-heading)] text-2xl font-bold tracking-[0.2em] text-[var(--theme-fg)]"
         >
-          ASCEND
+          NEXUS SOLUTIONS
         </a>
 
         {/* Desktop Links */}
@@ -779,7 +795,7 @@ function HeroSection() {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-gray-400 sm:text-xl"
         >
-          ASCEND transforms ambitious UK businesses through cutting-edge web
+          Nexus Solutions transforms ambitious UK businesses through cutting-edge web
           development, data-driven digital marketing, and intelligent AI
           automation — unlocking growth that compounds.
         </motion.p>
@@ -1000,12 +1016,12 @@ function ServicesSection() {
    ────────────────────────────────────────────── */
 function ValuePropSection() {
   return (
-    <section id="why-ascend" className="relative py-28 lg:py-36">
+    <section id="why-nexus" className="relative py-28 lg:py-36">
       <div className="gradient-line mb-20" />
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <AnimatedSection className="mb-16 text-center">
           <span className="mb-4 inline-block text-xs font-medium tracking-[0.3em] text-gray-500">
-            WHY ASCEND
+            WHY NEXUS SOLUTIONS
           </span>
           <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
             The Unfair Advantage
@@ -1123,7 +1139,7 @@ function ContactSection() {
     try {
       // We are using Web3Forms (password-free form forwarding).
       // 1. Go to https://web3forms.com/
-      // 2. Enter your email (ascenduk.agency@gmail.com) and click "Create Access Key".
+      // 2. Enter your email and click "Create Access Key".
       // 3. Check your email for the key, and paste it here:
       const accessKey = "7b325b3d-e17a-4d6b-a65f-8c54b95e118e";
 
@@ -1135,8 +1151,8 @@ function ContactSection() {
         },
         body: JSON.stringify({
           access_key: accessKey,
-          subject: "New Enquiry from ASCEND Website",
-          from_name: "ASCEND Website",
+          subject: "New Enquiry from Nexus Solutions Website",
+          from_name: "Nexus Solutions Website",
           ...formState,
         }),
       });
@@ -1170,7 +1186,7 @@ function ContactSection() {
               GET IN TOUCH
             </span>
             <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Ready to Ascend?
+              Ready to Scale?
             </h2>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-gray-400">
               Book a free, no-obligation growth call with our team. We&apos;ll
@@ -1344,7 +1360,7 @@ function Footer() {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex flex-col items-center gap-2 md:items-start">
             <span className="font-[family-name:var(--font-heading)] text-xl font-bold tracking-[0.2em] text-white">
-              ASCEND
+              NEXUS SOLUTIONS
             </span>
             <span className="text-xs text-gray-600">
               Elevating UK businesses through digital innovation & AI.
@@ -1363,7 +1379,7 @@ function Footer() {
           </div>
           <div className="flex flex-col items-center gap-1 md:items-end">
             <span className="text-xs text-gray-600">
-              © {new Date().getFullYear()} ASCEND. All rights reserved.
+              © {new Date().getFullYear()} Nexus Solutions. All rights reserved.
             </span>
             <span className="text-xs text-gray-700">
               UK-Based Digital Growth Agency
@@ -1399,11 +1415,11 @@ function WhatsAppFloat() {
 /* ──────────────────────────────────────────────
    MAIN EXPORT
    ────────────────────────────────────────────── */
-export default function AscendPage() {
+export default function NexusSolutionsPage() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    const saved = localStorage.getItem("ascend-theme") as
+    const saved = localStorage.getItem("nexus-theme") as
       | "dark"
       | "light"
       | null;
@@ -1421,7 +1437,7 @@ export default function AscendPage() {
     } else {
       document.documentElement.classList.remove("light");
     }
-    localStorage.setItem("ascend-theme", next);
+    localStorage.setItem("nexus-theme", next);
   };
 
   return (
