@@ -15,13 +15,13 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Nexus Solutions | UK B2B Digital Growth & AI Solutions Agency",
+  title: "Arvent Solutions | UK B2B Digital Growth & AI Solutions Agency",
   description:
-    "Nexus Solutions drives UK business growth through cutting-edge digital marketing, custom web development, and AI-powered automation. Book a free growth call today.",
+    "Arvent Solutions drives UK business growth through cutting-edge digital marketing, custom web development, and AI-powered automation. Book a free growth call today.",
   keywords:
     "UK digital agency, B2B growth, AI solutions, web development, digital marketing, SEO, AI chatbots, AI calling agents",
   openGraph: {
-    title: "Nexus Solutions | UK B2B Digital Growth & AI Solutions Agency",
+    title: "Arvent Solutions | UK B2B Digital Growth & AI Solutions Agency",
     description:
       "We transform UK businesses with cutting-edge digital and AI solutions. Custom websites, digital marketing, AI automation — all under one roof.",
     type: "website",

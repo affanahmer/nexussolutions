@@ -466,7 +466,7 @@ function IconMoon() {
    ────────────────────────────────────────────── */
 const NAV_LINKS = [
   { label: "Services", href: "#services" },
-  { label: "About", href: "#why-nexus" },
+  { label: "About", href: "#why-arvent" },
   { label: "Results", href: "#results" },
   { label: "Contact", href: "#contact" },
 ];
@@ -634,7 +634,7 @@ function Navigation({
           href="#"
           className="font-[family-name:var(--font-heading)] text-2xl font-bold tracking-[0.2em] text-[var(--theme-fg)]"
         >
-          NEXUS SOLUTIONS
+          ARVENT SOLUTIONS
         </a>
 
         {/* Desktop Links */}
@@ -799,7 +799,7 @@ function HeroSection() {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-gray-400 sm:text-xl"
         >
-          Nexus Solutions transforms ambitious UK businesses through cutting-edge web
+          Arvent Solutions transforms ambitious UK businesses through cutting-edge web
           development, data-driven digital marketing, and intelligent AI
           automation — unlocking growth that compounds.
         </motion.p>
@@ -1020,12 +1020,12 @@ function ServicesSection() {
    ────────────────────────────────────────────── */
 function ValuePropSection() {
   return (
-    <section id="why-nexus" className="relative py-28 lg:py-36">
+    <section id="why-arvent" className="relative py-28 lg:py-36">
       <div className="gradient-line mb-20" />
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <AnimatedSection className="mb-16 text-center">
           <span className="mb-4 inline-block text-xs font-medium tracking-[0.3em] text-gray-500">
-            WHY NEXUS SOLUTIONS
+            WHY ARVENT SOLUTIONS
           </span>
           <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
             The Unfair Advantage
@@ -1155,8 +1155,8 @@ function ContactSection() {
         },
         body: JSON.stringify({
           access_key: accessKey,
-          subject: "New Enquiry from Nexus Solutions Website",
-          from_name: "Nexus Solutions Website",
+          subject: "New Enquiry from Arvent Solutions Website",
+          from_name: "Arvent Solutions Website",
           ...formState,
         }),
       });
@@ -1364,7 +1364,7 @@ function Footer() {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex flex-col items-center gap-2 md:items-start">
             <span className="font-[family-name:var(--font-heading)] text-xl font-bold tracking-[0.2em] text-white">
-              NEXUS SOLUTIONS
+              ARVENT SOLUTIONS
             </span>
             <span className="text-xs text-gray-600">
               Elevating UK businesses through digital innovation & AI.
@@ -1383,7 +1383,7 @@ function Footer() {
           </div>
           <div className="flex flex-col items-center gap-1 md:items-end">
             <span className="text-xs text-gray-600">
-              © {new Date().getFullYear()} Nexus Solutions. All rights reserved.
+              © {new Date().getFullYear()} Arvent Solutions. All rights reserved.
             </span>
             <span className="text-xs text-gray-700">
               UK-Based Digital Growth Agency
@@ -1419,11 +1419,11 @@ function WhatsAppFloat() {
 /* ──────────────────────────────────────────────
    MAIN EXPORT
    ────────────────────────────────────────────── */
-export default function NexusSolutionsPage() {
+export default function ArventSolutionsPage() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    const saved = localStorage.getItem("nexus-theme") as
+    const saved = localStorage.getItem("arvent-theme") as
       | "dark"
       | "light"
       | null;
@@ -1441,7 +1441,7 @@ export default function NexusSolutionsPage() {
     } else {
       document.documentElement.classList.remove("light");
     }
-    localStorage.setItem("nexus-theme", next);
+    localStorage.setItem("arvent-theme", next);
   };
 
   return (
