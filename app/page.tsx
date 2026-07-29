@@ -7,6 +7,7 @@ import {
   useTransform,
   useInView,
   AnimatePresence,
+  type Variants,
 } from "framer-motion";
 
 /* ──────────────────────────────────────────────
@@ -66,7 +67,7 @@ function StaggerContainer({
   );
 }
 
-const staggerChild = {
+const staggerChild: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
