@@ -801,7 +801,7 @@ function HeroSection() {
         >
           Arvent Solutions transforms ambitious UK businesses through cutting-edge web
           development, data-driven digital marketing, and intelligent AI
-          automation — unlocking growth that compounds.
+          automation — unlocking sustainable growth.
         </motion.p>
 
         <motion.div
@@ -1028,7 +1028,7 @@ function ValuePropSection() {
             WHY ARVENT SOLUTIONS
           </span>
           <h2 className="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            The Unfair Advantage
+            The Strategic Advantage
             <br />
             Your Competitors Don&apos;t Have
           </h2>
